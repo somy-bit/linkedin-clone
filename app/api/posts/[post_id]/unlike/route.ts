@@ -7,8 +7,13 @@ import { connectDB } from '@/mangodb/db';
 import { Post } from '@/mangodb/models/post';
 import { auth } from '@clerk/nextjs/server';
 
-export async function DELETE(req: NextRequest, { params }: { params: { post_id: string } }) {
-    const postId = params.post_id;
+export async function DELETE(req: NextRequest) {
+
+     const url = new URL(req.url);
+    const pathParts= url.pathname.split("/");
+    const postId = pathParts[pathParts.indexOf("posts")+1]
+
+    
     const { userId } : UnlikePostRequestBody = await req.json();
 
     if (!userId) {

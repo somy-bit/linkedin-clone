@@ -4,31 +4,39 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 
-export async function GET(request:Request,{params}:{params:{post_id:string}}){
+export async function GET(request: Request) {
 
-    try{
+    const url = new URL(request.url);
+    const pathParts = url.pathname.split("/");
+    const postId = pathParts[pathParts.indexOf("posts") + 1]
+
+    try {
         await connectDB()
 
-        const post = await Post.findById(params.post_id)
+        const post = await Post.findById(postId)
 
-        if(!post){
-            return NextResponse.json({error:"post not found"},{status:404})
+        if (!post) {
+            return NextResponse.json({ error: "post not found" }, { status: 404 })
         }
 
         return NextResponse.json(post)
 
-    }catch(error){
-        return NextResponse.json({error:"error occuerd while fetching the post"},{status:500})
+    } catch (error) {
+        return NextResponse.json({ error: "error occuerd while fetching the post" }, { status: 500 })
     }
 }
 
-export interface DeletePostRequestBody{
-    userId:string;
+export interface DeletePostRequestBody {
+    userId: string;
 }
 
-export async function DELETE(request: Request, { params }: { params: { post_id: string } }) {
+export async function DELETE(request: Request) {
 
-    
+    const url = new URL(request.url);
+    const pathParts = url.pathname.split("/");
+    const postId = pathParts[pathParts.indexOf("posts") + 1]
+
+
 
     try {
         auth.protect();
@@ -36,14 +44,14 @@ export async function DELETE(request: Request, { params }: { params: { post_id: 
 
         const user = await currentUser();
 
-        const post =await Post.findById(params.post_id);
+        const post = await Post.findById(postId);
 
-        if(!post){
-            return NextResponse.json({error:"post not found"},{status:404})
+        if (!post) {
+            return NextResponse.json({ error: "post not found" }, { status: 404 })
         }
 
-        if(post.user.userId !== user?.id){
-            throw new Error ("post doesnot belong to the user")
+        if (post.user.userId !== user?.id) {
+            throw new Error("post doesnot belong to the user")
         }
 
         await post.removePost();

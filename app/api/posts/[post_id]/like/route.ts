@@ -3,13 +3,17 @@ import { Post } from "@/mangodb/models/post";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-export async function GET(request: Request, { params }: { params: { post_id: string } }) {
+export async function GET(request: Request) {
+
+     const url = new URL(request.url);
+    const pathParts= url.pathname.split("/");
+    const postId = pathParts[pathParts.indexOf("posts")+1]
 
     try {
 
         await connectDB()
 
-        const post = await Post.findById(params.post_id)
+        const post = await Post.findById(postId)
 
         if (!post) {
 
@@ -28,14 +32,20 @@ export interface LikePostRequestBody {
     userId: string;
 }
 
-export async function POST(request: Request, { params }: { params: { post_id: string } }) {
+export async function POST(request: Request) {
+
+     const url = new URL(request.url);
+    const pathParts= url.pathname.split("/");
+    const postId = pathParts[pathParts.indexOf("posts")+1]
+
+
     try {
         auth.protect()
         await connectDB();
 
         const user = await currentUser();
 
-        const post = await Post.findById(params.post_id);
+        const post = await Post.findById(postId);
 
         if (!post) {
             return NextResponse.json({ error: "post not found" }, { status: 404 });

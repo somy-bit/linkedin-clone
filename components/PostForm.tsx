@@ -6,6 +6,7 @@ import { useUser } from '@clerk/nextjs'
 import { Button } from './ui/button'
 import { ImageIcon, XIcon } from 'lucide-react'
 import createPostAction from '@/actions/createPostAction'
+import { toast } from 'sonner'
 
 function PostForm() {
 
@@ -44,7 +45,12 @@ function PostForm() {
         <div className='mb-2'>
             <form ref={ref} action={
                 (formData)=>{
-                    handlePostAction(formData)
+                    const promise = handlePostAction(formData)
+                    toast.promise(promise,{
+                        loading: "Creating post",
+                        success: "Post created",
+                        error: "Error creating post"
+                    })
                 }
             }
             className='bg-white rounded-lg p-3 border border-gray-300'>

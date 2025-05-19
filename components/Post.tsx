@@ -12,6 +12,8 @@ import { Trash2 } from 'lucide-react'
 import deletePostAction from '@/actions/deletePostAction'
 import Image from 'next/image'
 import PostOptions from './PostOptions'
+import TimeAgo from './TimeAgo'
+import { toast } from 'sonner'
 
 function Post({ post }: { post: IPostDocument }) {
 
@@ -44,7 +46,7 @@ function Post({ post }: { post: IPostDocument }) {
                         </p>
 
                         <p className='text-xs text-gray-400'>
-                            <ReactTimeAgo date={new Date(post.createdAt)} />
+                            <TimeAgo date={post.createdAt.toString()} />
                         </p>
 
                     </div>
@@ -55,6 +57,13 @@ function Post({ post }: { post: IPostDocument }) {
                             onClick={() => {
                                 if (typeof post._id === 'string') {
                                     const promis = deletePostAction(post._id)
+                                    toast.promise(promis, {
+                                        loading: "Deleting post",
+                                        success: "Post deleted",
+                                        error: "Error deleting post"
+                                    })
+
+                                    
                                 } else {
                                     console.error('Post ID is not a string:', post._id)
                                 }

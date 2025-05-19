@@ -10,6 +10,7 @@ import {
   SignedOut,
   UserButton,
 } from '@clerk/nextjs'
+import { Toaster } from "sonner";
 
 
 const geistSans = Geist({
@@ -38,13 +39,14 @@ export default function RootLayout({
         <body
           className='min-h-screen flex flex-col'
         >
-          {/* toaster */}
+          <Toaster position="bottom-left"/>
+
           <header className="border-b border-b-gray-300 sticky top-0 bg-white z-50">
             <Header />
           </header>
 
           <div className="bg-[#f4f2ED] flex-1 w-full">
-            <main>
+            <main className="max-w-6xl mx-auto">
               {children}
             </main>
           </div>

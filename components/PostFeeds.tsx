@@ -5,10 +5,10 @@ import Post from './Post'
 function PostFeeds({ posts }: { posts: IPostDocument[] }) {
     return (
         <div className='space-y-2 pb-20'>{
-            posts.map((post,index) => (
+            posts.map((post) => (
                 <Post
                     post={post}
-                    key={index}
+                    key={(post._id as string | number).toString()}
                 />
 
             ))

@@ -1,6 +1,7 @@
 import PostFeeds from "@/components/PostFeeds";
 import PostForm from "@/components/PostForm";
 import UserInformation from "@/components/UserInformation";
+import Widget from "@/components/Widget";
 import { connectDB } from "@/mangodb/db";
 import { Post } from "@/mangodb/models/post";
 import { SignedIn } from "@clerk/nextjs";
@@ -31,7 +32,7 @@ export default async function Home() {
       </section>
 
       <section className="hidden xl:inline xl:col-span-2 justify-center">
-        {/* widget */}
+        <Widget />
       </section>
     </div>
   );
